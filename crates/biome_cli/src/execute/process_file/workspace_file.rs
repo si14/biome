@@ -2,7 +2,7 @@ use crate::execute::diagnostics::{ResultExt, ResultIoExt};
 use crate::execute::process_file::SharedTraversalOptions;
 use biome_diagnostics::{category, Error};
 use biome_fs::{File, OpenOptions, RomePath};
-use biome_service::file_handlers::{Language, ASTRO_FENCE};
+use biome_service::file_handlers::{Language, ASTRO_FENCE, VUE_FENCE};
 use biome_service::workspace::{FileGuard, OpenFileParams};
 use biome_service::{Workspace, WorkspaceError};
 use std::path::{Path, PathBuf};
@@ -75,6 +75,24 @@ impl<'ctx, 'app> WorkspaceFile<'ctx, 'app> {
                 let mut tmp = self.input.clone();
                 tmp.replace_range(start.end()..end.start(), new_content.as_str());
                 new_content = tmp;
+            }
+        }
+
+        if self.as_extension() == Some("vue") {
+            let mut edges = VUE_FENCE.find_iter(&self.input);
+            if let (Some(start), Some(end)) = (edges.next(), edges.next()) {
+                let mut tmp = self.input.clone();
+                tmp.replace_range(start.end()..end.start(), new_content.as_str());
+                new_content = tmp;
+            }
+        }
+
+        if self.as_extension() == Some("vue") {
+            let captures = VUE_FENCE.captures(&self.input);
+            if let Some(script) = captures.and_then(|captures| captures.get(1)) {
+                let mut tmp = self.input.clone();
+                tmp.replace_range(script.start()..script.end(), new_content.as_str());
+                new_content = tmp
             }
         }
 

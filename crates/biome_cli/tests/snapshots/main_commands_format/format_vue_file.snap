@@ -1,0 +1,52 @@
+---
+source: crates/biome_cli/tests/snap_test.rs
+expression: content
+---
+## `file.vue`
+
+```vue
+<script>
+import {    something } from "file.vue";
+
+statement ( ) ;
+
+</script>
+<template></template>
+```
+
+# Termination Message
+
+```block
+format ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Some errors were emitted while running checks.
+  
+
+
+```
+
+# Emitted Messages
+
+```block
+file.vue format ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  i Formatter would have printed the following content:
+  
+    1 1 │   <script>
+    2   │ - import·{····something·}·from·"file.vue";
+      2 │ + import·{·something·}·from·"file.vue";
+    3 3 │   
+    4   │ - statement·(·)·;
+    5   │ - 
+      4 │ + statement();
+    6 5 │   </script>
+    7 6 │   <template></template>
+  
+
+```
+
+```block
+Compared 1 file(s) in <TIME>
+```
+
+

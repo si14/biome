@@ -1,0 +1,89 @@
+---
+source: crates/biome_cli/tests/snap_test.rs
+assertion_line: 429
+expression: content
+---
+## `files/.babelrc`
+
+```babelrc
+
+/*test*/ [
+
+/* some other comment*/1, 2, 3]
+	
+```
+
+## `files/.eslintrc.json`
+
+```json
+
+/*test*/ [
+
+/* some other comment*/1, 2, 3]
+	
+```
+
+## `files/.jshintrc`
+
+```jshintrc
+
+/*test*/ [
+
+/* some other comment*/1, 2, 3]
+	
+```
+
+# Termination Message
+
+```block
+format ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Some errors were emitted while running checks.
+  
+
+
+```
+
+# Emitted Messages
+
+```block
+files/.eslintrc.json format ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  i Formatter would have printed the following content:
+  
+    1   │ - 
+    2   │ - /*test*/·[
+    3   │ - 
+    4   │ - /*·some·other·comment*/1,·2,·3]
+    5   │ - → 
+      1 │ + /*test*/·[/*·some·other·comment*/·1,·2,·3]
+      2 │ + 
+  
+
+```
+
+```block
+files/.jshintrc format ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × The file files/.jshintrc was ignored.
+  
+
+```
+
+```block
+files/.babelrc format ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × The file files/.babelrc was ignored.
+  
+
+```
+
+```block
+Compared 3 file(s) in <TIME>
+```
+
+```block
+Skipped 2 file(s)
+```
+
+

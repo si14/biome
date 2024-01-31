@@ -6,6 +6,7 @@ use crate::execute::process_file::{
 use crate::execute::TraversalMode;
 use biome_diagnostics::{category, DiagnosticExt};
 use biome_service::file_handlers::ASTRO_FENCE;
+use biome_service::file_handlers::VUE_FENCE;
 use biome_service::workspace::RuleCategories;
 use biome_service::WorkspaceError;
 use std::path::Path;
@@ -84,6 +85,14 @@ pub(crate) fn format_with_guard<'ctx>(
                         if let (Some(start), Some(end)) = (matches.next(), matches.next()) {
                             let mut tmp = input.clone();
                             tmp.replace_range(start.end()..end.start(), output.as_str());
+                            output = tmp
+                        }
+                    }
+                    if workspace_file.as_extension() == Some("vue") {
+                        let captures = VUE_FENCE.captures(&input);
+                        if let Some(script) = captures.and_then(|captures| captures.get(1)) {
+                            let mut tmp = input.clone();
+                            tmp.replace_range(script.start()..script.end(), output.as_str());
                             output = tmp
                         }
                     }
