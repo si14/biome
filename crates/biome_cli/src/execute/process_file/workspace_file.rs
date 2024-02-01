@@ -12,7 +12,6 @@ pub(crate) struct WorkspaceFile<'ctx, 'app> {
     guard: FileGuard<'app, dyn Workspace + 'ctx>,
     file: Box<dyn File>,
     pub(crate) path: PathBuf,
-    input: String,
 }
 
 impl<'ctx, 'app> WorkspaceFile<'ctx, 'app> {
@@ -50,7 +49,6 @@ impl<'ctx, 'app> WorkspaceFile<'ctx, 'app> {
             file,
             guard,
             path: PathBuf::from(path),
-            input,
         })
     }
 
@@ -68,15 +66,7 @@ impl<'ctx, 'app> WorkspaceFile<'ctx, 'app> {
 
     /// It updates the workspace file with `new_content`
     pub(crate) fn update_file(&mut self, new_content: impl Into<String>) -> Result<(), Error> {
-        let mut new_content = new_content.into();
-        if self.as_extension() == Some("astro") {
-            let mut edges = ASTRO_FENCE.find_iter(&self.input);
-            if let (Some(start), Some(end)) = (edges.next(), edges.next()) {
-                let mut tmp = self.input.clone();
-                tmp.replace_range(start.end()..end.start(), new_content.as_str());
-                new_content = tmp;
-            }
-        }
+        let new_content = new_content.into();
 
         if self.as_extension() == Some("vue") {
             if let Some(script) = VUE_FENCE
