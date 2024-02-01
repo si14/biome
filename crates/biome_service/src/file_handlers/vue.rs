@@ -19,7 +19,8 @@ use tracing::{debug, error, info};
 pub(crate) struct VueFileHandler;
 
 lazy_static! {
-
+    pub static ref VUE_FENCE: Regex = Regex::new(
+        r#"(?msix)(?:<script[^>]?)
             (?:
             (?:(lang)\s*=\s*['"](?P<lang>[^'"]*)['"])
             |
