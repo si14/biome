@@ -19,8 +19,16 @@ use tracing::{debug, error, info};
 pub(crate) struct VueFileHandler;
 
 lazy_static! {
-    pub static ref VUE_FENCE: Regex =
-        Regex::new(r"(?msi)<script>\n(?<script>.*)</script>").unwrap();
+    pub static ref VUE_FENCE: Regex = Regex::new(
+        r#"(?msix)(?:<script[^>]?)
+            (?:
+            (?:(lang)\s*=\s*['"](?P<lang>[^'"]*)['"])
+            |
+            (?:(\w+)\s*=\s*['"]([^'"]*)['"])
+            )*
+        [^>]*>\n(?P<script>(?U:.*))</script>"#
+    )
+    .unwrap();
 }
 
 impl ExtensionHandler for VueFileHandler {

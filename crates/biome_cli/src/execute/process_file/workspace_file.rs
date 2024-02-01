@@ -79,17 +79,10 @@ impl<'ctx, 'app> WorkspaceFile<'ctx, 'app> {
         }
 
         if self.as_extension() == Some("vue") {
-            let mut edges = VUE_FENCE.find_iter(&self.input);
-            if let (Some(start), Some(end)) = (edges.next(), edges.next()) {
-                let mut tmp = self.input.clone();
-                tmp.replace_range(start.end()..end.start(), new_content.as_str());
-                new_content = tmp;
-            }
-        }
-
-        if self.as_extension() == Some("vue") {
-            let captures = VUE_FENCE.captures(&self.input);
-            if let Some(script) = captures.and_then(|captures| captures.get(1)) {
+            if let Some(script) = VUE_FENCE
+                .captures(&self.input)
+                .and_then(|captures| captures.name("script"))
+            {
                 let mut tmp = self.input.clone();
                 tmp.replace_range(script.start()..script.end(), new_content.as_str());
                 new_content = tmp

@@ -89,8 +89,10 @@ pub(crate) fn format_with_guard<'ctx>(
                         }
                     }
                     if workspace_file.as_extension() == Some("vue") {
-                        let captures = VUE_FENCE.captures(&input);
-                        if let Some(script) = captures.and_then(|captures| captures.get(1)) {
+                        if let Some(script) = VUE_FENCE
+                            .captures(&input)
+                            .and_then(|captures| captures.name("script"))
+                        {
                             let mut tmp = input.clone();
                             tmp.replace_range(script.start()..script.end(), output.as_str());
                             output = tmp
